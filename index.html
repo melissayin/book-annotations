@@ -167,9 +167,10 @@
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-
-const SUPABASE_URL = 'https://qbutkzlhgpnnbwdqnriy.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_ojumBWFsUDwVskWjRr18dQ_o-YnHO9f';
+// ---- 1. Fill these in from your Supabase project (Settings -> API) ----
+const SUPABASE_URL = 'https://YOUR-PROJECT-REF.supabase.co';
+const SUPABASE_ANON_KEY = 'YOUR-ANON-PUBLIC-KEY';
+// -------------------------------------------------------------------
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -196,7 +197,10 @@ async function renderAuth() {
     $('magic-link-btn').onclick = async () => {
       const email = $('email-input').value.trim();
       if (!email) return;
-      const { error } = await supabase.auth.signInWithOtp({ email });
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: { emailRedirectTo: window.location.href }
+      });
       $('auth-area').innerHTML = error ? `Error: ${error.message}` : 'Check your email for a sign-in link.';
     };
     $('signed-out-msg').classList.remove('hidden');
